@@ -39,13 +39,14 @@ public class AlohaClient {
 			try {
 				socket = new AlohaSocket(
 				        InetAddress.getByName(hostName), Integer.parseInt(portNum));
+				
 			} catch (UnknownHostException e) {
 				System.out.println(Messages.getString("AlohaClient.UNKHOSTERR")); //$NON-NLS-1$
 				e.printStackTrace();
 			}
 			
             boolean done = false;
-            String echo;
+            String echo = new String();
             
             while (!done) {
 
@@ -64,16 +65,20 @@ public class AlohaClient {
                         System.out.println(Messages.getString("AlohaClient.LOGINFAIL")); //$NON-NLS-1$
                     }
                     socket.sendMessage("100"); //$NON-NLS-1$
+                    echo = socket.receiveMessage();
+                    break;
                     
                 case "200": //$NON-NLS-1$
                     socket.sendMessage("200"); //$NON-NLS-1$
                     socket.sendFile(file);
+                    echo = socket.receiveMessage();
                     break;
                     
                 case "400": //$NON-NLS-1$
                     System.out.println(Messages.getString("AlohaClient.LOGOUTMSG")); //$NON-NLS-1$
                     done = true;
                     socket.sendMessage("400"); //$NON-NLS-1$
+                    echo = socket.receiveMessage();
                     socket.close();
                     break;
                     
@@ -81,9 +86,6 @@ public class AlohaClient {
                 	System.out.println(Messages.getString("AlohaClient.INVALIDCMD")); //$NON-NLS-1$
                 	continue;
                 }
-                
-                // get reply from server
-                echo = socket.receiveMessage();
                 System.out.println(echo);
             } // end while
         } // end try
