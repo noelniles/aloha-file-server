@@ -10,19 +10,29 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class AlohaSocket {
   private Socket socket;
   private DataInputStream input;
   private DataOutputStream output;
 
-  AlohaSocket(InetAddress acceptorHost, int acceptorPort) throws SocketException, IOException {
-    socket = new Socket(acceptorHost, acceptorPort);
+  AlohaSocket(InetAddress acceptorHost, int acceptorPort) {
+    try {
+      socket = new Socket(acceptorHost, acceptorPort);
+    } catch (IOException e) {
+      System.out.println(res.str("err.IOEXCEPT"));
+      e.printStackTrace();
+    } catch (SecurityException e) {
+      System.out.println(res.str("err.SECEXCEPT"));
+    } catch (IllegalArgumentException e) {
+      System.out.println(res.str("err.PORT"));
+    } catch (NullPointerException e) {
+      System.out.println("***ERROR: Address can't be empty");
+    }
     setStreams();
   }
 
-  AlohaSocket(Socket socket) throws IOException {
+  AlohaSocket(Socket socket) {
     this.socket = socket;
     setStreams();
   }

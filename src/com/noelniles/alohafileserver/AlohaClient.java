@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class AlohaClient {
 
@@ -37,18 +36,8 @@ public class AlohaClient {
         portNum = res.str("addr.PORT"); //$NON-NLS-1$
       }
 
-      AlohaSocket socket = null;
-
-      try {
-        socket = new AlohaSocket(InetAddress.getByName(hostName), Integer.parseInt(portNum));
-
-      } catch (UnknownHostException e) {
-        System.out.println(res.str("err.UNKHOSTERR")); //$NON-NLS-1$
-        e.printStackTrace();
-
-      } catch (SecurityException e) {
-        System.out.println(res.str("err.SECEXCEPT"));
-      }
+      AlohaSocket socket = null;      
+      socket = new AlohaSocket(InetAddress.getByName(hostName), Integer.parseInt(portNum));
 
       // Used to hold res to be sent to the server
       String message = new String();
